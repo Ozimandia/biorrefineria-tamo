@@ -12,6 +12,7 @@ let graficaDona   = null;
 // Primera inicialización
 // ---------------------------------------------------------------
 function inicializarGraficas(d) {
+  const unidadEje = unidadActual === 'kg' ? 'Kilogramos' : 'Toneladas';
   const optsBase = {
     responsive: true,
     maintainAspectRatio: false,
@@ -35,7 +36,7 @@ function inicializarGraficas(d) {
       scales: {
         x: { ticks: { font: { size: 11 }, autoSkip: false }, grid: { display: false } },
         y: { ticks: { font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.05)' },
-             title: { display: true, text: 'Toneladas', font: { size: 11 } } }
+             title: { display: true, text: unidadEje, font: { size: 11 } } }
       }
     }
   });
@@ -68,6 +69,8 @@ function actualizarGraficas(d) {
     return;
   }
   graficaBarras.data.datasets[0].data = datosQty(d);
+  const unidadEje = (typeof unidadActual !== 'undefined' && unidadActual === 'kg') ? 'Kilogramos' : 'Toneladas';
+  graficaBarras.options.scales.y.title.text = unidadEje;
   graficaBarras.update();
 
   graficaDona.data.datasets[0].data = datosVal(d);
@@ -80,7 +83,8 @@ function actualizarGraficas(d) {
 // Helpers de datos
 // ---------------------------------------------------------------
 function datosQty(d) {
-  return [d.silice, d.biochar, d.celulosa, d.gases].map(v => parseFloat(v.toFixed(1)));
+  const conv = (typeof unidadActual !== 'undefined' && unidadActual === 'kg') ? 1000 : 1;
+  return [d.silice, d.biochar, d.celulosa, d.gases].map(v => parseFloat((v * conv).toFixed(1)));
 }
 
 function datosVal(d) {
@@ -95,6 +99,7 @@ function renderLeyendas(d) {
   const total = vals.reduce((a, b) => a + b, 0);
   const pcts  = vals.map(v => Math.round(v / total * 100));
 
+  const unidad = (typeof unidadActual !== 'undefined' && unidadActual === 'kg') ? 'kg' : 't';
   document.getElementById('leyenda-bar').innerHTML = ETIQUETAS.map((l, i) => `
     <span style="display:flex;align-items:center;gap:4px;">
       <span style="width:10px;height:10px;border-radius:2px;background:${COLORES[i]};display:inline-block;"></span>

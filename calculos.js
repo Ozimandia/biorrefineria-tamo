@@ -131,6 +131,12 @@ function calcular() {
 function fmt(n, dec = 1) {
   return Number(n).toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+function fmtPeso(toneladas) {
+  if (unidadActual === 'kg') {
+    return fmt(toneladas * 1000, 1) + ' <span style="font-size:12px;font-weight:400;">kg</span>';
+  }
+  return fmt(toneladas) + ' <span style="font-size:12px;font-weight:400;">t</span>';
+}
 function fmtUSD(n) {
   return 'USD ' + Math.round(n).toLocaleString('es-CO');
 }
@@ -150,7 +156,7 @@ function renderProduccion(d) {
       <div style="font-size:22px;margin-bottom:6px;">${it.emoji}</div>
       <p style="font-size:12px;color:${it.color};margin:0 0 2px;">${it.nombre}</p>
       <p style="font-size:20px;font-weight:600;color:${it.txt};margin:0;">
-        ${fmt(it.qty)} <span style="font-size:12px;font-weight:400;">t</span>
+         ${fmtPeso(it.qty)}
       </p>
     </div>`).join('');
 }
@@ -177,11 +183,13 @@ function renderEconomico(d) {
 // Render tarjetas ambientales
 // ---------------------------------------------------------------
 function renderAmbiental(d) {
+  const unidad = unidadActual === 'kg' ? 'kg' : 't';
+  const conv   = unidadActual === 'kg' ? 1000 : 1;
   const items = [
-    { emoji:'☁️', label:'CO₂ evitado',        value:fmt(d.co2Evitado)+' t CO₂' },
-    { emoji:'🔥', label:'Biomasa no quemada',  value:fmt(d.tamo)+' t'            },
-    { emoji:'🌱', label:'Carbono en suelo',    value:fmt(d.carbonoCapturado)+' t C' },
-    { emoji:'♻️', label:'Tasa valorización',   value:d.tasaVal+'%'               },
+    { emoji:'☁️', label:'CO₂ evitado',        value: fmt(d.co2Evitado * conv) + ' ' + unidad + ' CO₂' },
+    { emoji:'🔥', label:'Biomasa no quemada',  value: fmt(d.tamo * conv) + ' ' + unidad               },
+    { emoji:'🌱', label:'Carbono en suelo',    value: fmt(d.carbonoCapturado) + ' t C'                 },
+    { emoji:'♻️', label:'Tasa valorización',   value: d.tasaVal + '%'                                  },
   ];
   document.getElementById('cards-ambiental').innerHTML = items.map(it => `
     <div style="background:#EAF3DE;border-radius:12px;padding:14px 12px;">
