@@ -63,17 +63,13 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Cantidad de tamo disponible</label>
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <input type="number" id="tamo-input" min="0" step="any" value="10"
-              class="tamo-field w-full sm:flex-1 rounded-xl border-2 border-verde-100 px-4 py-3 text-lg font-semibold text-verde-800 focus:outline-none focus:border-verde-400 transition-all"
-              placeholder="Ej: 500"
-              oninput="actualizar()" />
-            <div class="flex rounded-xl border-2 border-verde-100 overflow-hidden self-stretch sm:self-auto">
-              <button id="btn-kg" onclick="seleccionarUnidad('kg')"
-                class="unidad-btn flex-1 sm:flex-none px-6 py-3 text-sm font-semibold bg-verde-600 text-white transition-all">kg</button>
-              <button id="btn-t" onclick="seleccionarUnidad('t')"
-                class="unidad-btn flex-1 sm:flex-none px-6 py-3 text-sm font-semibold bg-white text-gray-500 transition-all">t</button>
+            <div class="flex items-center gap-3">
+              <input type="number" id="tamo-input" min="0" step="any" value="10"
+                class="tamo-field flex-1 rounded-xl border-2 border-verde-100 px-4 py-3 text-lg font-semibold text-verde-800 focus:outline-none focus:border-verde-400 transition-all"
+                placeholder="Ej: 500" oninput="actualizar()" />
+              
             </div>
-          </div>
+          
           <p class="text-xs text-gray-400 mt-1.5" id="tamo-equivalencia">= 0.01 toneladas</p>
         </div>
 
@@ -86,7 +82,20 @@
             <input type="range" id="humedad" min="5" max="40" value="15" step="1"
               class="flex-1 slider-verde" oninput="actualizar()" />
             <span class="text-verde-600 font-semibold text-lg w-16 text-right" id="hum-val">15%</span>
+            <!-- Unidad  toggle-->
+            <div class="flex flex-col items-center gap-1 flex-shrink-0">
+                <span id="label-unidad" class="text-xs font-semibold text-verde-600 w-8 text-center">kg</span>
+                <button id="toggle-unidad" onclick="toggleUnidad()"
+                  class="relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none"
+                  style="background:#1D9E75;" role="switch" aria-checked="false" aria-label="Cambiar unidad kg/t">
+                  <span id="toggle-thumb"
+                    class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300">
+                  </span>
+                </button>
+                <!-- <span class="text-xs text-gray-400">t</span> -->
+              </div>
           </div>
+          
           <p class="text-xs text-gray-400 mt-1">Recién trillado: 20–30% · Secado al sol: 10–15%</p>
         </div>
 
@@ -156,6 +165,40 @@
       <h2 class="text-base font-semibold text-verde-800 mb-1">🏭 Proceso específico de biorrefinería modular</h2>
       <p class="text-xs text-gray-400 mb-5">Toque cada etapa para ver sus operaciones detalladas</p>
       <div id="proceso-interactivo"></div>
+    </section>
+
+    <!-- MANUAL PDF -->
+    <section class="bg-white rounded-2xl shadow-sm border border-verde-50 p-5">
+      <h2 class="text-base font-semibold text-verde-800 mb-1">📄 Manual del proceso</h2>
+      <p class="text-xs text-gray-400 mb-4">Guía técnica completa de la biorrefinería modular de tamo de arroz</p>
+
+      <!-- VISOR en PC (oculto en móvil) -->
+      <div class="hidden sm:block rounded-xl overflow-hidden border border-verde-100" style="height:500px;">
+        <iframe
+          src="manual-biorefineria.pdf"
+          width="100%" height="100%"
+          style="border:none;"
+          title="Manual del proceso de biorrefinería">
+          <p class="text-sm text-gray-500 p-4">
+            Tu navegador no puede mostrar el PDF.
+            <a href="manual-biorefineria.pdf" class="text-verde-600 underline">Descárgalo aquí</a>.
+          </p>
+        </iframe>
+      </div>
+
+      <!-- BOTÓN descarga en móvil (oculto en PC) -->
+      <div class="sm:hidden">
+        <a href="manual-biorefineria.pdf" download
+          class="flex items-center justify-center gap-2 w-full bg-verde-600 text-white rounded-xl py-3 px-4 font-semibold text-sm active:bg-verde-800 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar manual completo (PDF)
+        </a>
+        <p class="text-xs text-gray-400 text-center mt-2">Guía técnica · Biorrefinería de tamo de arroz</p>
+      </div>
     </section>
 
     <!-- NOTA -->

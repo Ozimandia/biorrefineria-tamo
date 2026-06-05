@@ -78,14 +78,28 @@ async function consultarPrecio() {
 // ---------------------------------------------------------------
 // Unidad kg / t
 // ---------------------------------------------------------------
-function seleccionarUnidad(u) {
+function toggleUnidad() {
+  const nuevaUnidad = unidadActual === 'kg' ? 't' : 'kg';
+  aplicarUnidad(nuevaUnidad);
+}
+
+function aplicarUnidad(u) {
   unidadActual = u;
-  document.getElementById('btn-kg').className = u === 'kg'
-    ? 'unidad-btn px-4 py-3 text-sm font-semibold bg-verde-600 text-white transition-all'
-    : 'unidad-btn px-4 py-3 text-sm font-semibold bg-white text-gray-500 transition-all';
-  document.getElementById('btn-t').className = u === 't'
-    ? 'unidad-btn px-4 py-3 text-sm font-semibold bg-verde-600 text-white transition-all'
-    : 'unidad-btn px-4 py-3 text-sm font-semibold bg-white text-gray-500 transition-all';
+  const thumb  = document.getElementById('toggle-thumb');
+  const toggle = document.getElementById('toggle-unidad');
+  const label  = document.getElementById('label-unidad');
+
+  if (u === 't') {
+    thumb.style.transform  = 'translateX(24px)';
+    toggle.style.background = '#639922';
+    toggle.setAttribute('aria-checked', 'true');
+    label.textContent = 't';
+  } else {
+    thumb.style.transform  = 'translateX(0)';
+    toggle.style.background = '#1D9E75';
+    toggle.setAttribute('aria-checked', 'false');
+    label.textContent = 'kg';
+  }
   actualizar();
 }
 
