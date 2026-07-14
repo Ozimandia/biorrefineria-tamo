@@ -97,7 +97,7 @@ function datosVal(d) {
 function renderLeyendas(d) {
   const vals = datosVal(d);
   const total = vals.reduce((a, b) => a + b, 0);
-  const pcts  = vals.map(v => Math.round(v / total * 100));
+  const pcts  = total > 0 ? vals.map(v => Math.round(v / total * 100)) : vals.map(() => 0);
 
   const unidad = (typeof unidadActual !== 'undefined' && unidadActual === 'kg') ? 'kg' : 't';
   document.getElementById('leyenda-bar').innerHTML = ETIQUETAS.map((l, i) => `

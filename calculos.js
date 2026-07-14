@@ -1,78 +1,40 @@
 // ============================================================
-//  calculos.js  –  Lógica central + precio sílice vía API
+//  calculos.js  –  Lógica central + referencia manual de sílice
 // ============================================================
 
 let procesoActual = 'pirolisis';
 let unidadActual  = 'kg';
 
-// Precio base (se actualiza con la API)
-let precioSilicePorTon = 1820;
+// Referencia manual: Intel Market Research, enero 2026.
+const PRECIO_SILICE = {
+  precio_usd_ton: 1820,
+  rango_min: 1400,
+  rango_max: 2200,
+  fuente: 'Intel Market Research',
+  fecha: 'enero 2026',
+  tipo: 'precipitated silica RHA'
+};
+let precioSilicePorTon = PRECIO_SILICE.precio_usd_ton;
 
 const PRECIOS_OTROS = { biochar: 120, celulosa: 200, gases: 50 };
 
 const RENDIMIENTOS = {
-  pirolisis:  { ceniza: 0.20, biochar: 0.30, celulosa: 0.35, gases: 0.28 },
-  combustion: { ceniza: 0.22, biochar: 0.25, celulosa: 0.30, gases: 0.20 },
-  mixto:      { ceniza: 0.21, biochar: 0.28, celulosa: 0.33, gases: 0.24 }
+  pirolisis:  { ceniza: 0.10, biochar: 0.35, gases: 0.55 },
+  combustion: { ceniza: 0.12, biochar: 0.00, gases: 0.88 },
+  mixto:      { ceniza: 0.08, biochar: 0.15, celulosa: 0.40, gases: 0.37 }
 };
 const FRACCION_SILICE = 0.90;
 
 // ---------------------------------------------------------------
-// Obtener precio sílice desde Claude API con web search
+// Mostrar referencia manual de precio de sílice
 // ---------------------------------------------------------------
-async function consultarPrecio() {
-  const btn = document.getElementById('btn-actualizar');
+function mostrarPrecioReferencia() {
   const disp = document.getElementById('precio-display');
   const rango = document.getElementById('precio-rango');
   const fuente = document.getElementById('precio-fuente');
-  const errDiv = document.getElementById('precio-error');
-
-  btn.disabled = true;
-  btn.innerHTML = '<svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg> Consultando...';
-  disp.textContent = 'Consultando...';
-  errDiv.classList.add('hidden');
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{
-          role: 'user',
-          content: `Busca el precio actual de mercado en USD por tonelada de sílice amorfa derivada de la paja de arroz (rice husk ash silica, RHA silica) en 2026. 
-          Responde SOLO con un objeto JSON sin texto adicional ni backticks, con esta estructura exacta:
-          {"precio_usd_ton": 1820, "rango_min": 800, "rango_max": 2500, "fuente": "nombre de la fuente", "fecha": "mes año", "tipo": "precipitated silica RHA"}`
-        }]
-      })
-    });
-
-    const data = await res.json();
-    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
-    const jsonMatch = textBlocks.match(/\{[\s\S]*\}/);
-
-    if (!jsonMatch) throw new Error('Sin datos de precio');
-
-    const precio = JSON.parse(jsonMatch[0]);
-    precioSilicePorTon = precio.precio_usd_ton;
-
-    disp.textContent = `USD ${precio.precio_usd_ton.toLocaleString('es-CO')}/t`;
-    rango.textContent = `Rango: $${precio.rango_min.toLocaleString()}–$${precio.rango_max.toLocaleString()}/t`;
-    fuente.textContent = `Fuente: ${precio.fuente} · ${precio.fecha} · ${precio.tipo}`;
-
-    actualizar();
-  } catch (e) {
-    errDiv.textContent = 'No se pudo obtener el precio en línea. Usando referencia de mercado 2026: USD 1,820/t (sílice precipitada RHA).';
-    errDiv.classList.remove('hidden');
-    disp.textContent = 'USD 1,820/t';
-    rango.textContent = 'Rango referencial: $800–$2,500/t';
-    fuente.textContent = 'Fuente: Promedio mercado global RHA silica 2026';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Actualizar precio';
-  }
+  disp.textContent = `USD ${PRECIO_SILICE.precio_usd_ton.toLocaleString('es-CO')}/t`;
+  rango.textContent = `Rango: USD ${PRECIO_SILICE.rango_min.toLocaleString('es-CO')}–${PRECIO_SILICE.rango_max.toLocaleString('es-CO')}/t`;
+  fuente.textContent = `Fuente: ${PRECIO_SILICE.fuente} · ${PRECIO_SILICE.fecha} · ${PRECIO_SILICE.tipo}`;
 }
 
 // ---------------------------------------------------------------
@@ -90,7 +52,7 @@ function aplicarUnidad(u) {
   const label  = document.getElementById('label-unidad');
 
   if (u === 't') {
-    thumb.style.transform  = 'translateX(24px)';
+    thumb.style.transform  = 'translateX(20px)';
     toggle.style.background = '#639922';
     toggle.setAttribute('aria-checked', 'true');
     label.textContent = 't';
@@ -119,9 +81,10 @@ function calcular() {
   const tamoSeco  = tamo * (1 - humedad);
   const ceniza    = tamoSeco * rend.ceniza;
   const silice    = ceniza * FRACCION_SILICE;
-  const biochar   = tamoSeco * rend.biochar;
-  const celulosa  = tamoSeco * rend.celulosa;
-  const gases     = tamoSeco * rend.gases;
+
+  const biochar   = tamoSeco * (rend.biochar || 0);
+  const celulosa  = tamoSeco * (rend.celulosa || 0);
+  const gases     = tamoSeco * (rend.gases || 0);
 
   const valSilice   = silice   * precioSilicePorTon;
   const valBiochar  = biochar  * PRECIOS_OTROS.biochar;
@@ -202,7 +165,7 @@ function renderAmbiental(d) {
   const items = [
     { emoji:'☁️', label:'CO₂ evitado',        value: fmt(d.co2Evitado * conv) + ' ' + unidad + ' CO₂' },
     { emoji:'🔥', label:'Biomasa no quemada',  value: fmt(d.tamo * conv) + ' ' + unidad               },
-    { emoji:'🌱', label:'Carbono en suelo',    value: fmt(d.carbonoCapturado) + ' t C'                 },
+    { emoji:'🌱', label:'Carbono en suelo',    value: fmt(d.carbonoCapturado * conv) + ' ' + unidad + ' C' },
     { emoji:'♻️', label:'Tasa valorización',   value: d.tasaVal + '%'                                  },
   ];
   document.getElementById('cards-ambiental').innerHTML = items.map(it => `
@@ -239,23 +202,27 @@ function actualizar() {
 
   // Mostrar equivalencia de unidad
   const eq = document.getElementById('tamo-equivalencia');
-  if (unidadActual === 'kg') {
-    eq.textContent = `= ${fmt(tamo, 3)} toneladas`;
-  } else {
-    eq.textContent = `= ${Math.round(tamo * 1000).toLocaleString()} kg`;
+  if(eq){
+    if (unidadActual === 'kg') {
+      eq.textContent = `= ${fmt(tamo, 3)} toneladas`;
+    } else {
+      eq.textContent = `= ${Math.round(tamo * 1000).toLocaleString()} kg`;
+    }
   }
 
   const d = calcular();
   renderProduccion(d);
   renderEconomico(d);
   renderAmbiental(d);
-  actualizarGraficas(d);
+  if(typeof actualizarGraficas === 'function') {
+    actualizarGraficas(d);
+  }
 }
 
 // ---------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  consultarPrecio();
+  mostrarPrecioReferencia();
   actualizar();
 });

@@ -35,6 +35,36 @@ body {
 }
 .slider-verde:hover::-webkit-slider-thumb { background: #0F6E56; }
 
+.slider-verde-sm {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 99px;
+  background: #C0DD97;
+  outline: none;
+  cursor: pointer;
+}
+.slider-verde-sm::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D9E75;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.slider-verde-sm::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1D9E75;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+.slider-verde-sm:hover::-webkit-slider-thumb { background: #0F6E56; }
+
 /* ---- Campo de tamo ---------------------------------------- */
 .tamo-field {
   font-size: 1.2rem;
