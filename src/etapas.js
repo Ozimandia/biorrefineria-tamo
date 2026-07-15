@@ -1,0 +1,9 @@
+export const ETAPAS = [
+  ['🌾', 'Recepción y pretratamiento', 'Acondicionamiento físico del tamo', ['Limpieza y eliminación de impurezas', 'Lavado con agua', 'Secado al sol o en secadores', 'Trituración y molienda inicial'], 'Tamo limpio y seco listo para proceso químico', '#1D9E75', '#EAF3DE'],
+  ['⚗️', 'Extracción de sílice', 'Digestión alcalina para disolver la sílice', ['Digestión alcalina con NaOH', 'Disolución de la sílice', 'Separación sólido-líquido mediante filtración'], 'Solución de silicato de sodio', '#185FA5', '#E6F1FB'],
+  ['🧪', 'Precipitación y recuperación', 'Acidificación controlada para precipitar', ['Acidificación controlada con HCl', 'Precipitación de sílice amorfa', 'Filtración, lavado y secado'], 'Sílice amorfa en polvo grueso', '#BA7517', '#FAEEDA'],
+  ['💎', 'Sílice de alta pureza', 'Refinamiento y control de calidad', ['Calcinación opcional', 'Molienda fina y tamizado', 'Control de pureza, superficie y pH'], 'Sílice amorfa de alta pureza lista para venta', '#639922', '#EAF3DE'],
+  ['🌿', 'Valorización orgánica', 'Conversión del residuo en coproductos', ['Pirólisis de la fracción residual', 'Producción de bioenergía', 'Producción de biochar'], 'Bioenergía, biochar y compuestos químicos', '#534AB7', '#EEEDFE'],
+  ['⚡', 'Integración energética', 'Autosuficiencia energética del proceso', ['Combustión de residuos para calor', 'Generación de vapor o electricidad', 'Recuperación de calor'], 'Planta energéticamente eficiente', '#993C1D', '#FAECE7'],
+  ['♻️', 'Gestión ambiental', 'Economía circular y sostenibilidad', ['Recirculación de aguas', 'Manejo de residuos finales', 'Monitoreo de emisiones y vertidos'], 'Proceso circular de mínimo impacto', '#0F6E56', '#E1F5EE']
+].map(([icono, titulo, resumen, operaciones, resultado, color, fondo]) => ({ icono, titulo, resumen, operaciones, resultado, color, fondo }));

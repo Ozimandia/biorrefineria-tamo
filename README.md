@@ -1,29 +1,31 @@
-# Biorrefineria Tamo 🌾🧪
+# Biorrefinería Tamo
 
-Una aplicación web interactiva diseñada para simular, calcular y visualizar los procesos de una biorrefinería basada en tamo (residuo agrícola).
+Calculadora React para estimar la valorización del tamo de arroz: producción de subproductos, ingresos, beneficios ambientales y etapas de una biorrefinería modular.
 
-## 🚀 Características Principales
+## Tecnologías
 
-*   **Cálculos de Proceso:** Módulo interactivo para determinar balances y rendimiento del procesamiento de tamo.
-*   **Visualización de Datos:** Gráficas dinámicas y responsivas para interpretar los resultados del proceso.
-*   **Documentación Integrada:** Incluye el manual técnico oficial en formato PDF dentro del repositorio.
+- React 18 y Vite 5
+- CSS nativo responsivo
+- Pruebas con el ejecutor nativo de Node
 
-## 📁 Estructura del Proyecto
+## Ejecutar el proyecto
 
-*   `index.html` - Interfaz gráfica y estructura principal de la aplicación.
-*   `estilos.css` - Diseño visual y adaptabilidad (responsivo).
-*   `calculos.js` - Lógica matemática y balance de procesos.
-*   `graficas.js` - Generación de gráficos y métricas visuales.
-*   `proceso.js` - Control del flujo y eventos de la aplicación.
-*   `manual-biorefineria.pdf` - Manual de usuario y contexto de ingeniería.
+```bash
+npm install
+npm run dev
+```
 
-## 🛠️ Tecnologías Utilizadas
+Abra la dirección local que muestre Vite. Para generar la versión de producción, ejecute:
 
-*   **Frontend:** HTML5, CSS3, JavaScript (Vanilla ES6).
-*   **Entorno de Desarrollo:** VS Code (`.vscode`).
+```bash
+npm run build
+```
 
-## 💻 Cómo Ejecutar el Proyecto
+## Scripts disponibles
 
-1. Clona este repositorio o descarga los archivos.
-2. Abre el archivo `index.html` en cualquier navegador web moderno.
-3. ¡Listo! No requiere de servidores ni bases de datos externas para funcionar.
+- `npm run dev`: inicia el entorno de desarrollo.
+- `npm run build`: genera la aplicación en `dist/`.
+- `npm run preview`: sirve la compilación de producción localmente.
+- `npm test`: ejecuta las pruebas de regresión y de cálculos React.
+
+El manual técnico se sirve desde `public/manual-biorefineria.pdf`.
